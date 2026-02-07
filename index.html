@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Attendance App</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4CAF50">
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box {
+    width: 45%;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.student {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="capture">
+    <h2>Attendance</h2>
+
+    <label>Section:</label>
+    <input id="section"><br><br>
+
+    <label>Date:</label>
+    <input type="date" id="date"><br><br>
+
+    <div class="section">
+        <div class="box">
+            <h3>Male</h3>
+            <div class="student"><input type="checkbox"> Student Name</div>
+        </div>
+
+        <div class="box">
+            <h3>Female</h3>
+            <div class="student"><input type="checkbox"> Student Name</div>
+        </div>
+    </div>
+</div>
+
+<button onclick="saveJPEG()">Download JPEG</button>
+
+<script>
+document.getElementById("date").valueAsDate = new Date();
+
+async function saveJPEG() {
+
+    const students = document.querySelectorAll(".student");
+    students.forEach(s => {
+        if (!s.querySelector("input").checked) s.style.display = "none";
+    });
+
+    const canvas = await html2canvas(document.getElementById("capture"), {
+        backgroundColor: "#fff",
+        scale: 2
+    });
+
+    canvas.toBlob(blob => {
+        const section = document.getElementById("section").value || "Section";
+        const date = document.getElementById("date").value || "Date";
+
+        const file = new File(
+            [blob],
+            `Attendance_${section}_${date}.jpg`,
+            { type: "image/jpeg" }
+        );
+
+        // REAL FILE SAVE (PWA ONLY)
+        if (window.showSaveFilePicker) {
+            saveWithPicker(file);
+        } else {
+            alert("Install the app first (PWA)");
+        }
+
+        students.forEach(s => s.style.display = "flex");
+    }, "image/jpeg", 0.95);
+}
+
+async function saveWithPicker(file) {
+    const handle = await window.showSaveFilePicker({
+        suggestedName: file.name,
+        types: [{
+            description: "JPEG Image",
+            accept: { "image/jpeg": [".jpg"] }
+        }]
+    });
+
+    const writable = await handle.createWritable();
+    await writable.write(file);
+    await writable.close();
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+}
+</script>
+
+</body>
+</html>
