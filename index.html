@@ -4,15 +4,12 @@
 <meta charset="UTF-8">
 <title>Attendance App</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4CAF50">
-
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 body {
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #eef2f5;
     padding: 20px;
 }
 
@@ -20,38 +17,76 @@ body {
     max-width: 900px;
     margin: auto;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #2E7D32;
+}
+
+.form-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.form-group div {
+    flex: 1;
+    min-width: 200px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input[type="text"], input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 
 .section {
     display: flex;
-    justify-content: space-between;
+    gap: 20px;
 }
 
 .box {
-    width: 45%;
-    border: 1px solid #ccc;
+    flex: 1;
+    border: 1px solid #ddd;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 10px;
+    background: #fafafa;
+}
+
+.box h3 {
+    margin-top: 0;
+    color: #2E7D32;
 }
 
 .student {
     display: flex;
-    align-items: center;
-    margin-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
 }
 
 button {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    padding: 15px 20px;
-    background: #4CAF50;
+    padding: 15px 25px;
+    background: #2E7D32;
     color: white;
     border: none;
     border-radius: 50px;
     font-size: 16px;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -59,24 +94,81 @@ button {
 <body>
 
 <div class="container" id="capture">
-    <h2>Attendance</h2>
+    <h2>Class Attendance</h2>
 
-    <label>Section:</label>
-    <input id="section"><br><br>
+    <div class="form-group">
+        <div>
+            <label>Section</label>
+            <input type="text" id="section">
+        </div>
 
-    <label>Date:</label>
-    <input type="date" id="date"><br><br>
+        <div>
+            <label>Subject</label>
+            <input type="text" id="subject">
+        </div>
+
+        <div>
+            <label>Date</label>
+            <input type="date" id="date">
+        </div>
+    </div>
 
     <div class="section">
+
+        <!-- MALE -->
         <div class="box">
             <h3>Male</h3>
-            <div class="student"><input type="checkbox"> Student Name</div>
+
+            <div class="student"><input type="checkbox"> ABOL REIGNER LEI PRAXIDIO</div>
+            <div class="student"><input type="checkbox"> ALLEGO JAYSIN PAUL</div>
+            <div class="student"><input type="checkbox"> BONITE DAVE LINWELL ALINDOGAN</div>
+            <div class="student"><input type="checkbox"> FRANCISCO CHARLES BRAIN JULIANAS</div>
+            <div class="student"><input type="checkbox"> GUERRA WYMAR INTENSION</div>
+            <div class="student"><input type="checkbox"> GUILLERMO JHONLORD ARROZA</div>
+            <div class="student"><input type="checkbox"> GULTIANO ANTONIO SEDENO</div>
+            <div class="student"><input type="checkbox"> JUMUAD GLENCIEL</div>
+            <div class="student"><input type="checkbox"> MANALO KARL JETHRO GAMBIL</div>
+            <div class="student"><input type="checkbox"> ORION JUSTINJAKE ARPON</div>
+            <div class="student"><input type="checkbox"> PAMANIAN WENDELL TATAC</div>
+            <div class="student"><input type="checkbox"> PARAGAS DERICK RIOFLORIDO</div>
+            <div class="student"><input type="checkbox"> PONCE JAMES GABRIEL ESPINOSA</div>
+            <div class="student"><input type="checkbox"> RONQUILLO DANIEL JOSHUA NEGRO</div>
+            <div class="student"><input type="checkbox"> SICCUAN BENJO LAMAY</div>
+            <div class="student"><input type="checkbox"> VEGA JHON MICHAEL PASIGUEN</div>
         </div>
 
+        <!-- FEMALE -->
         <div class="box">
             <h3>Female</h3>
-            <div class="student"><input type="checkbox"> Student Name</div>
+
+            <div class="student"><input type="checkbox"> ALTARES JENIVIE</div>
+            <div class="student"><input type="checkbox"> BALEAN DANIELLA MAY QUIAO</div>
+            <div class="student"><input type="checkbox"> BANGALAN IRISH NICOLE TAMAYO</div>
+            <div class="student"><input type="checkbox"> BAYAN QUEENCY AVERELLE GERONIMO</div>
+            <div class="student"><input type="checkbox"> CABILIN CAMILLE JANE SUAREZ</div>
+            <div class="student"><input type="checkbox"> CARREON ANICA KIM</div>
+            <div class="student"><input type="checkbox"> DE LEON CHLOE BLAIR TAMAYO</div>
+            <div class="student"><input type="checkbox"> DELA COSTA APRIL BASILIDES</div>
+            <div class="student"><input type="checkbox"> DURANTE PRINCESS ERISH SURI</div>
+            <div class="student"><input type="checkbox"> ESPINOSA VERIAN LEE SAMSON</div>
+            <div class="student"><input type="checkbox"> GIRAY CATHERINE ULANDAY</div>
+            <div class="student"><input type="checkbox"> JEREMIAS MAE PEARL OLAYVAR</div>
+            <div class="student"><input type="checkbox"> MABINI ANGEL LUIZA ASOY</div>
+            <div class="student"><input type="checkbox"> MIAGUE BEA MAGDELYN FALCUTAN</div>
+            <div class="student"><input type="checkbox"> OCAMPO LOUISE SARMIENTO</div>
+            <div class="student"><input type="checkbox"> ORLAZA SHENICKA BELLE GABRIEL</div>
+            <div class="student"><input type="checkbox"> PALENZUELA MA ANGELICA FRANCISCO</div>
+            <div class="student"><input type="checkbox"> PAPALA FATIMA MARAO</div>
+            <div class="student"><input type="checkbox"> PILI CHARMAINE JEAN</div>
+            <div class="student"><input type="checkbox"> REDITO HELYN MHAY DAVID</div>
+            <div class="student"><input type="checkbox"> REYES CHRISTINE JOY MANUEL</div>
+            <div class="student"><input type="checkbox"> ROMAPA KHALIDA TOCALO</div>
+            <div class="student"><input type="checkbox"> SANTIAGO EDRILYN CHAVEZ</div>
+            <div class="student"><input type="checkbox"> SILVA ALEXANDRA BUGARIN</div>
+            <div class="student"><input type="checkbox"> SINFUEGO JANELLA DELA PENA</div>
+            <div class="student"><input type="checkbox"> TUNGALA ANGEL MAE REBADAJO</div>
         </div>
+
     </div>
 </div>
 
@@ -85,57 +177,30 @@ button {
 <script>
 document.getElementById("date").valueAsDate = new Date();
 
-async function saveJPEG() {
-
+function saveJPEG() {
     const students = document.querySelectorAll(".student");
+
     students.forEach(s => {
-        if (!s.querySelector("input").checked) s.style.display = "none";
+        if (!s.querySelector("input").checked) {
+            s.style.display = "none";
+        }
     });
 
-    const canvas = await html2canvas(document.getElementById("capture"), {
+    html2canvas(document.getElementById("capture"), {
         backgroundColor: "#fff",
         scale: 2
-    });
-
-    canvas.toBlob(blob => {
+    }).then(canvas => {
         const section = document.getElementById("section").value || "Section";
+        const subject = document.getElementById("subject").value || "Subject";
         const date = document.getElementById("date").value || "Date";
 
-        const file = new File(
-            [blob],
-            `Attendance_${section}_${date}.jpg`,
-            { type: "image/jpeg" }
-        );
-
-        // REAL FILE SAVE (PWA ONLY)
-        if (window.showSaveFilePicker) {
-            saveWithPicker(file);
-        } else {
-            alert("Install the app first (PWA)");
-        }
+        const link = document.createElement("a");
+        link.download = `Attendance_${section}_${subject}_${date}.jpg`;
+        link.href = canvas.toDataURL("image/jpeg", 0.95);
+        link.click();
 
         students.forEach(s => s.style.display = "flex");
-    }, "image/jpeg", 0.95);
-}
-
-async function saveWithPicker(file) {
-    const handle = await window.showSaveFilePicker({
-        suggestedName: file.name,
-        types: [{
-            description: "JPEG Image",
-            accept: { "image/jpeg": [".jpg"] }
-        }]
     });
-
-    const writable = await handle.createWritable();
-    await writable.write(file);
-    await writable.close();
-}
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
