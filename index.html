@@ -29,6 +29,7 @@ body {
     padding: 16px;
     border-radius: 12px;
     box-shadow: 0 6px 15px rgba(0,0,0,.12);
+    overflow-x: hidden;
 }
 
 /* HEADER */
@@ -43,7 +44,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    flex-wrap: wrap; /* Stack on mobile */
+    flex-wrap: wrap;
 }
 
 .header img {
@@ -119,12 +120,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
-}
-
-@media (max-width: 480px) {
-    .section {
-        grid-template-columns: 1fr;
-    }
+    max-height: 60vh; /* scrollable for mobile */
+    overflow-y: auto;
+    padding-right: 4px;
 }
 
 .box {
@@ -207,6 +205,11 @@ button {
         gap: 12px;
     }
 
+    .section {
+        max-height: none;
+        overflow: visible;
+    }
+
     .buttons {
         position: static;
         border-top: none;
@@ -219,16 +222,11 @@ button {
     }
 }
 
-/* PRINT — ONE PAGE A4 */
+/* PRINT AND DOWNLOAD LAYOUT */
 @media print {
-    @page {
-        size: A4 portrait;
-        margin: 10mm;
-    }
-
     body {
         background: white;
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .container {
@@ -237,8 +235,7 @@ button {
         margin: 0;
     }
 
-    .buttons,
-    .search {
+    .buttons, .search, .select-all, input[type="checkbox"], .form-group label {
         display: none !important;
     }
 
@@ -246,26 +243,33 @@ button {
         width: 60px;
     }
 
-    .section {
-        gap: 10px;
-    }
-
-    .student {
-        font-size: 12px;
-        padding: 4px;
-    }
-
-    input[type="checkbox"] {
+    .form-group input {
         display: none;
     }
 
-    .student::before {
-        content: "☐";
-        margin-right: 6px;
+    /* Only show present students */
+    .student {
+        display: none;
     }
 
-    .student.present::before {
-        content: "☑";
+    .student.present {
+        display: block;
+        font-size: 14px;
+        padding: 4px 0;
+    }
+
+    .header-text p {
+        margin-bottom: 10px;
+    }
+
+    .section {
+        grid-template-columns: 1fr; /* single column for print */
+        gap: 8px;
+    }
+
+    .summary {
+        margin-top: 8px;
+        font-weight: bold;
     }
 }
 </style>
@@ -315,6 +319,7 @@ button {
 <div class="select-all">
 <input type="checkbox" id="selectAllMale" onclick="toggle('male',this)"> Select All
 </div>
+<!-- Male students -->
 <div class="student male"><input type="checkbox"> ABOL REIGNER LEI PRAXIDIO</div>
 <div class="student male"><input type="checkbox"> ALLEGO JAYSIN PAUL</div>
 <div class="student male"><input type="checkbox"> BONITE DAVE LINWELL ALINDOGAN</div>
@@ -339,6 +344,7 @@ button {
 <div class="select-all">
 <input type="checkbox" id="selectAllFemale" onclick="toggle('female',this)"> Select All
 </div>
+<!-- Female students -->
 <div class="student female"><input type="checkbox"> ALTARES JENIVIE</div>
 <div class="student female"><input type="checkbox"> BALEAN DANIELLA MAY QUIAO</div>
 <div class="student female"><input type="checkbox"> BANGALAN IRISH NICOLE TAMAYO</div>
@@ -388,18 +394,20 @@ const checkboxes = document.querySelectorAll(".student input");
 
 // Highlight and count
 checkboxes.forEach(cb => {
-    cb.onchange = () => {
+    cb.addEventListener("change", () => {
         cb.parentElement.classList.toggle("present", cb.checked);
         updateSummary();
-    };
+    });
 });
 
 // Select all functionality
 function toggle(group, source) {
-    document.querySelectorAll(".student." + group + " input").forEach(cb => {
+    const groupCheckboxes = document.querySelectorAll(".student." + group + " input");
+    groupCheckboxes.forEach(cb => {
         cb.checked = source.checked;
-        cb.dispatchEvent(new Event("change"));
+        cb.parentElement.classList.toggle("present", source.checked);
     });
+    updateSummary();
 }
 
 // Count total present
@@ -407,10 +415,11 @@ function updateSummary() {
     const total = [...checkboxes].filter(cb => cb.checked).length;
     document.getElementById("summary").textContent = `Total Present: ${total}`;
 
-    // Update select all checkboxes
+    // Update select all checkboxes dynamically
     ["male","female"].forEach(group => {
         const allCb = document.querySelectorAll(".student." + group + " input");
-        const selectAllCb = document.getElementById("selectAll" + group.charAt(0).toUpperCase() + group.slice(1));
+        const selectAllCb = document.querySelector(`#selectAll${group.charAt(0).toUpperCase() + group.slice(1)}`);
+        if (allCb.length === 0) return;
         selectAllCb.checked = [...allCb].every(cb => cb.checked);
     });
 }
@@ -434,6 +443,12 @@ function clearAll() {
 
 // Download JPEG
 function downloadJPEG() {
+    // Temporarily hide unpresent students for the snapshot
+    const allStudents = document.querySelectorAll(".student");
+    allStudents.forEach(s => {
+        if (!s.classList.contains("present")) s.style.display = "none";
+    });
+
     html2canvas(document.getElementById("capture"), { scale: 2 }).then(canvas => {
         const a = document.createElement("a");
         const section = document.getElementById("section").value || "Section";
@@ -442,6 +457,9 @@ function downloadJPEG() {
         a.download = `Attendance_${section}_${subject}_${date}.jpg`;
         a.href = canvas.toDataURL("image/jpeg", 0.95);
         a.click();
+
+        // Restore display
+        allStudents.forEach(s => s.style.display = "flex");
     });
 }
 </script>
